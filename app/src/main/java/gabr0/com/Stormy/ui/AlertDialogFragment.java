@@ -1,10 +1,12 @@
-package gabr0.com.Stormy;
+package gabr0.com.Stormy.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
+
+import gabr0.com.Stormy.R;
 
 public class AlertDialogFragment extends DialogFragment {
 

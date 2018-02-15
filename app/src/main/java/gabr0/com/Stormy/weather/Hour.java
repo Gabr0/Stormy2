@@ -1,4 +1,4 @@
-package gabr0.com.Stormy;
+package gabr0.com.Stormy.weather;
 
 /**
  * Created by Gabr0 on 15/02/2018.

@@ -1,11 +1,13 @@
-package gabr0.com.Stormy;
+package gabr0.com.Stormy.weather;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+import gabr0.com.Stormy.R;
 
-public class CurrentWeather {
+
+public class Current {
     private String mIcon;
     private long mTime;
     private double mTemperature;
