@@ -1,6 +1,7 @@
 package gabr0.com.Stormy.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -19,6 +20,7 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,9 +28,12 @@ import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import gabr0.com.Stormy.R;
 import gabr0.com.Stormy.weather.Current;
+import gabr0.com.Stormy.weather.Day;
 import gabr0.com.Stormy.weather.Forecast;
+import gabr0.com.Stormy.weather.Hour;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -54,8 +59,8 @@ public class MainActivity extends ActionBarActivity {
 
         mProgressBar.setVisibility(View.INVISIBLE);
 
-        final double latitude = 37.8267;
-        final double longitude = -122.423;
+        final double latitude = 40.4879155;
+        final double longitude = -3.7162610000000313;
 
         mRefreshImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,7 +152,9 @@ public class MainActivity extends ActionBarActivity {
 
     private void updateDisplay() {
         Current current = mForecast.getCurrent();
-        mTemperatureLabel.setText(current.getTemperature() + "");
+        int temperatureinC = current.getTemperature()-32;
+        temperatureinC = temperatureinC*5/9;
+        mTemperatureLabel.setText(temperatureinC + "");
         mTimeLabel.setText("At " + current.getFormattedTime() + " it will be");
         mHumidityValue.setText(current.getHumidity() + "");
         mPrecipValue.setText(current.getPrecipChance() + "%");
@@ -159,7 +166,49 @@ public class MainActivity extends ActionBarActivity {
     private Forecast parseForecastDetails(String jsonData) throws JSONException{
         Forecast forecast = new Forecast();
         forecast.setCurrent(getCurrentDetails(jsonData));
+        forecast.setHourlyForecast(getHourlyForecast(jsonData));
+        forecast.setDailyForecast(getDailyForecast(jsonData));
         return forecast;
+    }
+
+    private Day[] getDailyForecast(String jsonData)throws JSONException {
+        JSONObject forecast = new JSONObject(jsonData);
+        String timezone = forecast.getString("timezone");
+        JSONObject daily = forecast.getJSONObject("daily");
+        JSONArray data = daily.getJSONArray("data");
+        Day[] days = new Day[data.length()];
+        for (int i=0; i<data.length();i++){
+            JSONObject jsonHour = data.getJSONObject(i);
+            Day day = new Day();
+            day.setSummary(jsonHour.getString("summary"));
+            day.setTemperatureMax(jsonHour.getDouble("temperatureMax"));
+            day.setIcon(jsonHour.getString("icon"));
+            day.setTime(jsonHour.getLong("time"));
+            day.setTimezone(timezone);
+
+            days[i] = day;
+        }
+        return days;
+    }
+
+    private Hour[] getHourlyForecast(String jsonData) throws JSONException{
+        JSONObject forecast = new JSONObject(jsonData);
+        String timezone = forecast.getString("timezone");
+        JSONObject hourly = forecast.getJSONObject("hourly");
+        JSONArray data = hourly.getJSONArray("data");
+        Hour[] hours = new Hour[data.length()];
+        for (int i=0; i<data.length();i++){
+          JSONObject jsonHour = data.getJSONObject(i);
+          Hour hour = new Hour();
+          hour.setSummary(jsonHour.getString("summary"));
+          hour.setTemperature(jsonHour.getDouble("temperature"));
+          hour.setIcon(jsonHour.getString("icon"));
+          hour.setTime(jsonHour.getLong("time"));
+          hour.setTimezone(timezone);
+
+          hours[i] = hour;
+        }
+        return hours;
     }
 
     private Current getCurrentDetails(String jsonData) throws JSONException {
@@ -199,6 +248,11 @@ public class MainActivity extends ActionBarActivity {
     private void alertUserAboutError() {
         AlertDialogFragment dialog = new AlertDialogFragment();
         dialog.show(getFragmentManager(), "error_dialog");
+    }
+    @OnClick(R.id.dailyButton)
+    public void startDailyActivity(View view){
+        Intent intent = new Intent(this, DailyForecastActivity.class);
+        startActivity(intent);
     }
 }
 
