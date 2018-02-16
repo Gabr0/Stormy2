@@ -39,9 +39,7 @@ import gabr0.com.Stormy.weather.Hour;
 public class MainActivity extends ActionBarActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
-
-    private Forecast mForecast;
-
+    public static final String DAILY_FORECAST = "DAILY_FORECAST";
     @InjectView(R.id.timeLabel) TextView mTimeLabel;
     @InjectView(R.id.temperatureLabel) TextView mTemperatureLabel;
     @InjectView(R.id.humidityValue) TextView mHumidityValue;
@@ -50,6 +48,7 @@ public class MainActivity extends ActionBarActivity {
     @InjectView(R.id.iconImageView) ImageView mIconImageView;
     @InjectView(R.id.refreshImageView) ImageView mRefreshImageView;
     @InjectView(R.id.progressBar) ProgressBar mProgressBar;
+    private Forecast mForecast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,10 +153,10 @@ public class MainActivity extends ActionBarActivity {
         Current current = mForecast.getCurrent();
         int temperatureinC = current.getTemperature()-32;
         temperatureinC = temperatureinC*5/9;
-        mTemperatureLabel.setText(temperatureinC + "");
-        mTimeLabel.setText("At " + current.getFormattedTime() + " it will be");
-        mHumidityValue.setText(current.getHumidity() + "");
-        mPrecipValue.setText(current.getPrecipChance() + "%");
+        mTemperatureLabel.setText(String.format("%d", temperatureinC));
+        mTimeLabel.setText(getString(R.string.At) + current.getFormattedTime() + getString(R.string.willbe));
+        mHumidityValue.setText(String.format("%s", current.getHumidity()));
+        mPrecipValue.setText(String.format("%d%%", current.getPrecipChance()));
         mSummaryLabel.setText(current.getSummary());
 
         Drawable drawable = getResources().getDrawable(current.getIconId());
@@ -236,7 +235,10 @@ public class MainActivity extends ActionBarActivity {
     private boolean isNetworkAvailable() {
         ConnectivityManager manager = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        NetworkInfo networkInfo = null;
+        if (manager != null) {
+            networkInfo = manager.getActiveNetworkInfo();
+        }
         boolean isAvailable = false;
         if (networkInfo != null && networkInfo.isConnected()) {
             isAvailable = true;
@@ -252,6 +254,7 @@ public class MainActivity extends ActionBarActivity {
     @OnClick(R.id.dailyButton)
     public void startDailyActivity(View view){
         Intent intent = new Intent(this, DailyForecastActivity.class);
+        intent.putExtra(DAILY_FORECAST, mForecast.getDailyForecast());
         startActivity(intent);
     }
 }

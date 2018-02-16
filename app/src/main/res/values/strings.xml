@@ -9,5 +9,14 @@
     <string name="error_ok_button_text">OK</string>
     <string name="network_unavailable_message">Network is unavailable!</string>
     <string name="no_dailydata">There is no data to display</string>
+    <string name="this_week_s_weather">This Week\'s Weather</string>
+    <string name="Zone">Mirasierra, Madrid</string>
+    <string name="Today">Today</string>
+    <string name="_7_day">7 Day</string>
+    <string name="hourly">Hourly</string>
+    <string name="location">Mirasierra, Madrid</string>
+    <string name="humidity">HUMIDITY</string>
+    <string name="At">At</string>
+    <string name="willbe">it will be</string>
 
 </resources>
