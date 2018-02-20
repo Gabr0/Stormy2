@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Stormy</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="error_title">Ooops!</string>
+    <string name="error_message">Ha habido un error por favor intentelo de nuevo.</string>
+    <string name="error_ok_button_text">OK</string>
+    <string name="network_unavailable_message">Oops no tengo conexion a internet!</string>
+    <string name="no_dailydata">No hay datos que mostrar</string>
+    <string name="this_week_s_weather">El tiempo de esta semana</string>
+    <string name="Zone">Mirasierra, Madrid</string>
+    <string name="Today">Hoy</string>
+    <string name="_7_day">7 Dias</string>
+    <string name="hourly">Por horas</string>
+</resources>
