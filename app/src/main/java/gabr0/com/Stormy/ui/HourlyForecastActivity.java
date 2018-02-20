@@ -17,24 +17,26 @@ import gabr0.com.Stormy.weather.Hour;
 
 public class HourlyForecastActivity extends ActionBarActivity {
 
-    @InjectView(R.id.recyclerView)
-    RecyclerView mRecycleView;
     private Hour[] mHours;
+
+    @InjectView(R.id.recyclerView) RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hourly_forecast);
         ButterKnife.inject(this);
+
         Intent intent = getIntent();
         Parcelable[] parcelables = intent.getParcelableArrayExtra(MainActivity.HOURLY_FORECAST);
         mHours = Arrays.copyOf(parcelables, parcelables.length, Hour[].class);
-        HourAdapter adapter = new HourAdapter(mHours);
-        mRecycleView.setAdapter(adapter);
+
+        HourAdapter adapter = new HourAdapter(this, mHours);
+        mRecyclerView.setAdapter(adapter);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        mRecycleView.setLayoutManager(layoutManager);
-        mRecycleView.setHasFixedSize(true);
-    }
+        mRecyclerView.setLayoutManager(layoutManager);
 
+        mRecyclerView.setHasFixedSize(true);
+    }
 }
